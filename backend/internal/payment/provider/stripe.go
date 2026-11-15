@@ -7,8 +7,8 @@ import (
 	"strings"
 	"sync"
 
-	stripe "github.com/stripe/stripe-go/v85"
-	"github.com/stripe/stripe-go/v85/webhook"
+	stripe "github.com/stripe/stripe-go/v87"
+	"github.com/stripe/stripe-go/v87/webhook"
 	"github.com/telagod/subme/internal/payment"
 )
 
@@ -110,11 +110,11 @@ func (s *Stripe) CreatePayment(ctx context.Context, req payment.CreatePaymentReq
 	}
 
 	params := &stripe.PaymentIntentCreateParams{
-		Amount:             stripe.Int64(amountInMinorUnit),
-		Currency:           stripe.String(strings.ToLower(currency)),
-		PaymentMethodTypes: pmTypes,
-		Description:        stripe.String(req.Subject),
-		Metadata:           map[string]string{"orderId": req.OrderID},
+		Amount:                    stripe.Int64(amountInMinorUnit),
+		Currency:                  stripe.String(strings.ToLower(currency)),
+		AllowedPaymentMethodTypes: pmTypes,
+		Description:               stripe.String(req.Subject),
+		Metadata:                  map[string]string{"orderId": req.OrderID},
 	}
 
 	// WeChat Pay requires payment_method_options with client type
